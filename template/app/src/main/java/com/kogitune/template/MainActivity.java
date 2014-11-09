@@ -1,4 +1,4 @@
-package com.kogitune.template;
+package ${packageName};
 
 import android.app.Activity;
 import android.os.Bundle;
