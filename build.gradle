@@ -17,6 +17,7 @@ fileTree('template').each{
 	}
 }
 
+// copy bin files etc..
 copy {
 	from ('template')
 	exclude project.properties.templateJavaSourcePath
@@ -27,6 +28,7 @@ copy {
 
 	into 'output'
 }
+// copy Manifest.xml ,strings.xml etc..
 copy {
 	from ('template')
 	exclude project.properties.templateJavaSourcePath
@@ -37,4 +39,11 @@ copy {
 
 	expand project.properties;
 	into 'output'
+}
+// Java source copy
+copy {
+	from ('template/' + project.properties.templateJavaSourcePath)
+
+	into 'output/' + project.properties.templateJavaSourcePath + "/" + project.properties.packageName.split('\\.').toList().join('/')
+	expand project.properties;
 }
