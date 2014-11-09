@@ -47,7 +47,7 @@ task generateProject << {
     }
     // Java source copy
     copy {
-        from ('template/' + project.properties.templateJavaSourcePath)
+        from (templateDirName + '/' + project.properties.templateJavaSourcePath)
         into outputDirName + '/' + project.properties.templateJavaSourcePath + "/" + project.properties.packageName.split('\\.').toList().join('/')
 
         expand project.properties;
