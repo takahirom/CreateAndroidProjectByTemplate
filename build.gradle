@@ -19,6 +19,7 @@ fileTree('template').each{
 
 copy {
 	from ('template')
+	exclude project.properties.templateJavaSourcePath
 	canParseInputFiles.each{
 		def tempRelativePath = file('template').toURI().relativize(it.toURI())
 		exclude tempRelativePath.toString()
@@ -28,6 +29,7 @@ copy {
 }
 copy {
 	from ('template')
+	exclude project.properties.templateJavaSourcePath
 	cantParseInputFiles.each{
 		def tempRelativePath = file('template').toURI().relativize(it.toURI())
 		exclude tempRelativePath.toString()
