@@ -1,49 +1,55 @@
 import groovy.text.SimpleTemplateEngine
-def engine = new SimpleTemplateEngine()
-def canParseInputFiles = fileTree('template')
-def cantParseInputFiles = fileTree('template')
+task generateProject << {
+    def engine = new SimpleTemplateEngine()
+    def templateDirName = 'template'
+    def outputDirName = 'output'
+    def canParseInputFiles = fileTree(templateDirName)
+    def cantParseInputFiles = fileTree(templateDirName)
 
-fileTree('template').each{
-	fileName->
-	try{
-		engine.createTemplate(fileName)
-		// can parse
-		cantParseInputFiles -= fileTree(fileName)
-		println "include:" + fileName
-	}catch (e){
-		// cant parse
-		canParseInputFiles -= fileTree(fileName)
-		println "exclude:" + fileName
-	}
-}
+    fileTree(templateDirName).each{
+        fileName->
+        try{
+            engine.createTemplate(fileName)
+            // can parse
+            cantParseInputFiles -= fileTree(fileName)
+            println "include:" + fileName
+        }catch (e){
+            // cant parse
+            canParseInputFiles -= fileTree(fileName)
+            println "exclude:" + fileName
+        }
+    }
 
-// copy bin files etc..
-copy {
-	from ('template')
-	exclude project.properties.templateJavaSourcePath
-	canParseInputFiles.each{
-		def tempRelativePath = file('template').toURI().relativize(it.toURI())
-		exclude tempRelativePath.toString()
-	}
+    // copy bin files etc..
+    copy {
+        from (templateDirName)
+        into outputDirName
+        
+        exclude project.properties.templateJavaSourcePath
+        canParseInputFiles.each{
+            def tempRelativePath = file(templateDirName).toURI().relativize(it.toURI())
+            exclude tempRelativePath.toString()
+        }
 
-	into 'output'
-}
-// copy Manifest.xml ,strings.xml etc..
-copy {
-	from ('template')
-	exclude project.properties.templateJavaSourcePath
-	cantParseInputFiles.each{
-		def tempRelativePath = file('template').toURI().relativize(it.toURI())
-		exclude tempRelativePath.toString()
-	}
+    }
+    // copy Manifest.xml ,strings.xml etc..
+    copy {
+        from (templateDirName)
+        into outputDirName
 
-	expand project.properties;
-	into 'output'
-}
-// Java source copy
-copy {
-	from ('template/' + project.properties.templateJavaSourcePath)
+        exclude project.properties.templateJavaSourcePath
+        cantParseInputFiles.each{
+            def tempRelativePath = file(templateDirName).toURI().relativize(it.toURI())
+            exclude tempRelativePath.toString()
+        }
 
-	into 'output/' + project.properties.templateJavaSourcePath + "/" + project.properties.packageName.split('\\.').toList().join('/')
-	expand project.properties;
+        expand project.properties;
+    }
+    // Java source copy
+    copy {
+        from ('template/' + project.properties.templateJavaSourcePath)
+        into outputDirName + '/' + project.properties.templateJavaSourcePath + "/" + project.properties.packageName.split('\\.').toList().join('/')
+
+        expand project.properties;
+    }
 }
