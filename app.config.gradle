@@ -1,0 +1,8 @@
+println "app.config"
+ext {
+    appprop = [
+        packageName: "com.example.generated",
+        templateJavaSourcePath:"app/src/main/java",
+        appName: "あ"
+    ]
+}

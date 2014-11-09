@@ -1,8 +1,12 @@
 import groovy.text.SimpleTemplateEngine
-task generateProject << {
+apply from:"app.config.gradle"
+
+def templateDirName = 'template'
+def outputDirName = 'output'
+
+task createProject << {
+
     def engine = new SimpleTemplateEngine()
-    def templateDirName = 'template'
-    def outputDirName = 'output'
     def canParseInputFiles = fileTree(templateDirName)
     def cantParseInputFiles = fileTree(templateDirName)
 
@@ -24,8 +28,8 @@ task generateProject << {
     copy {
         from (templateDirName)
         into outputDirName
-        
-        exclude project.properties.templateJavaSourcePath
+
+        exclude appprop.templateJavaSourcePath
         canParseInputFiles.each{
             def tempRelativePath = file(templateDirName).toURI().relativize(it.toURI())
             exclude tempRelativePath.toString()
@@ -37,19 +41,19 @@ task generateProject << {
         from (templateDirName)
         into outputDirName
 
-        exclude project.properties.templateJavaSourcePath
+        exclude appprop.templateJavaSourcePath
         cantParseInputFiles.each{
             def tempRelativePath = file(templateDirName).toURI().relativize(it.toURI())
             exclude tempRelativePath.toString()
         }
 
-        expand project.properties;
+        expand appprop;
     }
     // Java source copy
     copy {
-        from (templateDirName + '/' + project.properties.templateJavaSourcePath)
-        into outputDirName + '/' + project.properties.templateJavaSourcePath + "/" + project.properties.packageName.split('\\.').toList().join('/')
+        from (templateDirName + '/' + appprop.templateJavaSourcePath)
+        into outputDirName + '/' + appprop.templateJavaSourcePath + "/" + appprop.packageName.split('\\.').toList().join('/')
 
-        expand project.properties;
+        expand appprop;
     }
 }
