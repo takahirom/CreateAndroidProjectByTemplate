@@ -29,7 +29,7 @@ task createProject << {
         from (templateDirName)
         into outputDirName
 
-        exclude appprop.templateJavaSourcePath
+        exclude templateJavaSourcePath
         canParseInputFiles.each{
             def tempRelativePath = file(templateDirName).toURI().relativize(it.toURI())
             exclude tempRelativePath.toString()
@@ -41,7 +41,7 @@ task createProject << {
         from (templateDirName)
         into outputDirName
 
-        exclude appprop.templateJavaSourcePath
+        exclude templateJavaSourcePath
         cantParseInputFiles.each{
             def tempRelativePath = file(templateDirName).toURI().relativize(it.toURI())
             exclude tempRelativePath.toString()
@@ -51,8 +51,8 @@ task createProject << {
     }
     // Java source copy
     copy {
-        from (templateDirName + '/' + appprop.templateJavaSourcePath)
-        into outputDirName + '/' + appprop.templateJavaSourcePath + "/" + appprop.packageName.split('\\.').toList().join('/')
+        from (templateDirName + '/' + templateJavaSourcePath)
+        into outputDirName + '/' + templateJavaSourcePath + "/" + appprop.packageName.split('\\.').toList().join('/')
 
         expand appprop;
     }

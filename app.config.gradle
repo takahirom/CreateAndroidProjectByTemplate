@@ -1,8 +1,8 @@
 println "app.config"
 ext {
+    templateJavaSourcePath = "app/src/main/java"
     appprop = [
         packageName: "com.example.generated",
-        templateJavaSourcePath:"app/src/main/java",
-        appName: "あ"
+        appName: "AppNameあ"
     ]
 }
