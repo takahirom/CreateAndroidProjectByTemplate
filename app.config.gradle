@@ -1,8 +1,11 @@
+import groovy.json.*
 println "app.config"
 ext {
     templateJavaSourcePath = "app/src/main/java"
-    appprop = [
-        packageName: "com.example.generated",
-        appName: "AppNameあ"
-    ]
+
+    def slurper = new JsonSlurper()
+    def text = new File('appconfig.json').text
+    def config = slurper.parseText(text)
+
+    appprop = config 
 }
