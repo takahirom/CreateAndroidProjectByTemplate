@@ -1,0 +1,28 @@
+<html>
+	<body>
+		<form name="app_form">
+		<p>pacakgeName</p>
+		<input type="text" name="packageName" value="com.example"/>
+		<p>appName</p>
+		<input type="text" name="appName" value="test"/>
+		<input type="submit" id="download" value="download"/>
+		</form>
+		<script>
+			
+			window.URL = window.URL || window.webkitURL;
+			document.getElementById("download").onclick = function() {
+				var obj = {
+					"packageName" : document.app_form.packageName.value,
+					"appName" : document.app_form.appName.value
+				};
+				var a = document.createElement("a");
+				var blob = new Blob([JSON.stringify(obj)], {
+					"type" : "application/octet-stream"
+				});
+				a.href = window.URL.createObjectURL(blob);
+				a.download = "appconfig.json";
+				a.click();
+			};
+		</script>
+	</body>
+</html>
